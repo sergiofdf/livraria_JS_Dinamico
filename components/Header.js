@@ -15,7 +15,8 @@ window.Header = () => {
             }),
             myFramework.link({
               text: 'LIVROS',
-              onClick: () => {  Page.books(); },
+              onClick: () => {  
+                Page.books(); },
             }),
             myFramework.link({
               text: 'CADASTRO',

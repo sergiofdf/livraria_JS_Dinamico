@@ -111,6 +111,7 @@ window.Page.register = () => {
                   text: `Livro '${book.titulo}'cadastrado com sucesso!`, 
                   type: 'success',
                 });
+                Page.register();
               }
             }
           }

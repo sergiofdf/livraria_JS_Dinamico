@@ -104,7 +104,7 @@ window.Page.books = async () => {
 
     }
 
-    const pageContainer = document.querySelector('.pageContainer');
+    const pageContainer = document.querySelector('.bookListPageContainer');
     pageContainer.appendChild(
       myFramework.modal(formData, updateBook, closeModal
       ));
@@ -187,7 +187,7 @@ window.Page.books = async () => {
 
     main.appendChild(
       myFramework.container({
-        className: 'pageContainer',
+        className: 'bookListPageContainer',
         children: [
           myFramework.input({
             name: 'searchInput',

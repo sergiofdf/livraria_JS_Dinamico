@@ -50,7 +50,7 @@ main{
 }
 
 .selected-itens-container{
-  width: 80vw;
+  width: 90vw;
   background-color: #9aabbb;
   padding: 20px 0;
   margin: 20px 0;
@@ -75,7 +75,7 @@ main{
 }
 
 .carrousel-item p{
-  padding: 5px 0;
+  padding: 5px 10px;
 }
 
 footer{
@@ -83,6 +83,7 @@ footer{
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding: 20px;
 }
 
 footer .social-icon{
@@ -115,7 +116,7 @@ div.notification-success {
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
-.pageContainer{
+.bookListPageContainer{
   position: relative;
   min-height: 100vh;
   display: flex; 
@@ -125,6 +126,57 @@ div.notification-success {
   background-color: var(--color-2);
   width: 100vw;
 }
+
+.bookListPageContainer > input{
+  margin: 50px;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 6px;
+}
+
+.table-container{
+  width: 97vw;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  padding: 20px 5px;
+}
+
+.booksTable{
+  width:100%; 
+  border: 2px solid #000;
+  border-collapse: collapse;
+  font-size: 2vw;
+}
+
+.booksTable-head > th{
+  font-size: 3vw;
+  padding: 10px; 
+  text-align: center; 
+  border: 2px solid #000;
+}
+
+.booksTable > tbody > tr > td {
+  padding: 10px; 
+  text-align: center; 
+  border:2px solid #000;
+}
+
+.booksTable > tbody > tr > td > img{
+  cursor: pointer;
+  width: 40px;
+  height: 40px;
+  background-color: var(--main-background-color);
+  box-shadow: none;
+  border-radius: 6px;
+  padding: 6px;
+}
+
+.booksTable > tbody > tr > td > img:hover{
+  background-color: var(--hover-color);
+  transition: ease-in 0.25s;
+}
+
 
 .modal-editBook{
   position: absolute;
@@ -140,6 +192,8 @@ div.notification-success {
 }
 
 .modal-dataContainer{
+  position: fixed;
+  top: 150px;
   width: 400px;
   background-color: var(--header-background-color);
   height: auto;
@@ -179,8 +233,8 @@ div.notification-success {
 .primary{
   width: auto;
   padding: 8px 20px;
-  background-color: var(--main-background-color);
-  border: 2px solid var(--main-background-color);
+  background-color: var(--footer-background-color);
+  border: 2px solid var(--footer-background-color);
   color: var(--text-color);
   cursor: pointer;
   font-size: 16px;
@@ -190,8 +244,9 @@ div.notification-success {
 }
 
 .primary:hover{
-  background-color: var(--footer-background-color);
-  color: var(--main-background-color);
+  background-color: transparent;
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
   transition: ease-in 0.3s;
 }
 
@@ -213,4 +268,71 @@ div.notification-success {
   background-color: var(--footer-background-color);
   color: rgba(224, 26, 26, 0.904);
   transition: ease-in 0.3s;
+}
+
+.book-form{
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+
+@media (max-width: 600px){
+  header > img {
+    display: none;
+  }
+
+  header > nav > a {
+    font-size: 5vw;
+  }
+
+  footer{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  footer > p {
+    font-size: 4vw;
+  }
+
+  .booksTable > tbody > tr > td > img{
+    width: 10vw;
+  }
+
+  .booksTable > tbody > tr > td {
+    word-break: break-all;
+  }
+
+  .modal-dataContainer{
+    width: 80vw;
+    padding: 4px;
+  }
+  
+  .book-data{
+    width: 70vw;
+  }
+  
+  .book-data > label{
+    color: var(--text-color);
+    font-size: 12px;
+
+  }
+  
+  .book-data > input {
+    width: 50vw;
+    margin-right: 10px;
+    padding: 2px 0px 2px 4px;
+    font-size: 12px;
+  }
+  
+  .primary, .cancel{
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
 }
