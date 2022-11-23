@@ -1,3 +1,14 @@
 {
   "uid": "18c0e5eb-6e35-4f48-832b-82da55d55ec6"
 }
+
+
+{
+  "aluno": {
+    "uid": "18c0e5eb-6e35-4f48-832b-82da55d55ec6"
+  },
+  "tiragem": 400,
+  "titulo": "Refatoração: Aperfeiçoando o Design de Códigos Existentes",
+  "autor": "Martin Fowler",
+  "descricao": "Por mais de vinte anos, programadores experientes no mundo inteiro contaram com o livro Refatoração de Martin Fowler para aperfeiçoar o design de códigos existentes e melhorar a manutenibilidade do software, assim como para deixar o código existente mais fácil de entender."
+}

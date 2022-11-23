@@ -3,11 +3,13 @@
 
   for (const file of [
     'common/myFramework',
+    'common/API',
     'pages/home',
     'pages/bookList',
     'pages/registerForm',
     'components/Header',
-    'components/Footer'
+    'components/Footer',
+    'components/Carrousel'
   ]) {
     const script = document.createElement('script')
     script.setAttribute('src', `${file}.js`)

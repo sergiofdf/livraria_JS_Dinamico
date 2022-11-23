@@ -21,10 +21,6 @@ window.Header = () => {
               text: 'CADASTRO',
               onClick: () => { Page.register(); },
             }),
-            myFramework.link({
-              text: 'EDITAR',
-              onClick: () => { },
-            }),
           ]
         })
       ]

@@ -6,7 +6,7 @@ window.myFramework = {
     if (attributeName) { element.setAttribute(attributeName, attributeValue); }
     return element;
   },
-  container: ({elementType = 'div', className = "", children}) => {
+  container: ({ elementType = 'div', className = "", children }) => {
     const container = document.createElement(elementType);
     if (className) { container.classList.add(className); }
     for (const child of children) {
@@ -20,50 +20,137 @@ window.myFramework = {
     link.addEventListener('click', onClick);
     return link;
   },
-  button: () => { },
+  button: ({ text, type = 'default', onClick = () => { } }) => {
+    const button = document.createElement('button');
+    button.classList.add(type);
+    button.setAttribute('type', 'button');
+    button.textContent = text;
+    button.addEventListener('click', onClick);
+    return button;
+  },
   label: (text) => {
     const labelElement = document.createElement('label');
-    labelElement.textContent = text +':';
+    labelElement.textContent = text + ':';
     return labelElement;
-   },
-  input: ({type = 'text', name, onKeyPress = ()=>{}}) => {
+  },
+  input: ({ type = 'text', name, value='', onKeyUp = () => { }, placeholder ='' }) => {
     const input = document.createElement('input');
     input.setAttribute('type', type);
     input.setAttribute('name', name);
-    input.addEventListener('keypress', onKeyPress);
+    input.setAttribute('value', value);
+    input.setAttribute('placeholder', placeholder);
+    input.addEventListener('keyup', onKeyUp);
     return input;
-},
+  },
   text: (type, textData) => {
     const text = document.createElement(type);
     text.textContent = textData;
     return text;
   },
   tableHead: (headerArray) => {
-    const theadFilled = headerArray.map( item => {
+    const theadFilled = headerArray.map(item => {
       const tElement = document.createElement('th');
       tElement.innerText = item;
       return tElement;
     });
     return theadFilled;
   },
-  tableBody: (bodyArray) => {
-    const bodyArrayFilled = bodyArray.map( item => {
+  tableBody: (bodyArray, editHandler, deleteHandler) => {
+    const bodyArrayFilled = bodyArray.map(item => {
       const tRow = document.createElement('tr');
       for (let key in item) {
-        const data = document.createElement('td');
-        data.innerText = item[key];
-        tRow.appendChild(data);
+        if (!String(key).includes('uid')) {
+          const data = document.createElement('td');
+          if (String(item[key]).includes('.svg')) {
+            const img = document.createElement('img');
+            img.setAttribute('class', 'icon-img');
+            if (String(item[key]).includes('edit')) {
+              img.setAttribute('class', item.uid);
+              img.addEventListener('click', editHandler)
+            }
+            if (String(item[key]).includes('delete')) {
+              img.setAttribute('class', item.uid);
+              img.addEventListener('click', deleteHandler)
+            }
+            img.setAttribute('src', item[key]);
+            data.appendChild(img);
+          } else {
+            data.innerText = item[key];
+          }
+          tRow.appendChild(data);
+        }
       }
       return tRow;
     });
     return bodyArrayFilled;
+  },
+  modal: (formData, actionHandler, closeHandler) => {
+      const modal = myFramework.container(
+        {
+           className : "modal-editBook", 
+           children : [
+            myFramework.container({
+              className : "modal-dataContainer", 
+              children : [
+                ...formData.map(data => {
+                  return myFramework.container({
+                    className: 'book-data',
+                    children: [
+                      data.label,
+                      data.input
+                    ]
+                  });
+                }),
+                myFramework.container({
+                  className: 'modal-buttons-container',
+                  children: [
+                    myFramework.button({
+                      text: 'Atualizar',
+                      type: 'primary',
+                      onClick: actionHandler
+                    }),
+                    myFramework.button({
+                      text: 'Cancelar',
+                      type: 'cancel',
+                      onClick: closeHandler
+                    })
+                  ]
+                }),
+              ]
+            })
+           ]
+        });
+        return modal;
   },
   loadCss: (reference) => {
     const cssLink = document.createElement('link');
     cssLink.setAttribute('rel', 'stylesheet');
     cssLink.setAttribute('type', 'text/css');
     cssLink.setAttribute('href', reference);
-    
-    document.head.appendChild(cssLink);   
+
+    document.head.appendChild(cssLink);
+  },
+  notification: {
+    timer: null,
+    element: null,
+    create: ({ text, type }) => {
+      myFramework.notification.remove();
+      const element = document.createElement('div');
+      element.classList.add('notification');
+      element.classList.add(`notification-${type}`);
+      element.textContent = text;
+      myFramework.notification.element = element;
+      document.body.appendChild(element);
+      myFramework.notification.timer = setTimeout(() => {
+        myFramework.notification.remove();
+      }, 5000);
+    },
+    remove: () => {
+      if (myFramework.notification.element) {
+        clearTimeout(myFramework.notification.timer);
+        document.body.removeChild(myFramework.notification.element);
+        myFramework.notification.element = null;
+      }
+    }
   }
 }
