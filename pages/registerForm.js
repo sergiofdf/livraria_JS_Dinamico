@@ -41,7 +41,7 @@ window.Page.register = () => {
         text: 'Título inválido.',
         type: 'error'
       });
-    }
+    };
 
     author = document.getElementsByName('author')[0];
     if (author.value == '') {
@@ -49,7 +49,7 @@ window.Page.register = () => {
         text: 'Autor inválido.',
         type: 'error'
       });
-    }
+    };
 
     description = document.getElementsByName('description')[0];
     if (description.value == '') {
@@ -57,7 +57,7 @@ window.Page.register = () => {
         text: 'Descrição inválida.',
         type: 'error'
       });
-    }
+    };
 
     tiragem = document.getElementsByName('tiragem')[0];
     if (tiragem.value == '') {
@@ -65,21 +65,22 @@ window.Page.register = () => {
         text: 'Tiragem inválida.',
         type: 'error'
       });
-    }
+    };
+
     return {
       titulo: title.value,
       autor: author.value,
       descricao: description.value,
       tiragem: Number(tiragem.value)
-    }
-  }
+    };
+  };
 
   function clearInputs() {
     title.value = '';
     author.value = '';
     description.value = '';
     tiragem.value = '';
-  }
+  };
 
   main.appendChild(
     myFramework.container({
@@ -93,7 +94,7 @@ window.Page.register = () => {
           onClick: async () => {
             myFramework.notification.remove();
             const book = validateForm();
-            if(book.titulo){
+            if (book.titulo) {
               const body = JSON.stringify({
                 aluno: {
                   uid: API.authCode
@@ -108,10 +109,10 @@ window.Page.register = () => {
                 service: '',
                 body
               });
-              if(post){
+              if (post) {
                 clearInputs();
                 myFramework.notification.create({
-                  text: `Livro '${book.titulo}'cadastrado com sucesso!`, 
+                  text: `Livro '${book.titulo}'cadastrado com sucesso!`,
                   type: 'success',
                 });
                 Page.register();
@@ -122,5 +123,4 @@ window.Page.register = () => {
       ]
     })
   );
-
 };

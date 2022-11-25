@@ -1,5 +1,4 @@
 window.Header = () => {
-
   document.body.appendChild(
     myFramework.container({
       elementType: 'header',
@@ -15,9 +14,7 @@ window.Header = () => {
             }),
             myFramework.link({
               text: 'LIVROS',
-              onClick: () => {
-                Page.books();
-              },
+              onClick: () => { Page.books(); },
             }),
             myFramework.link({
               text: 'CADASTRO',
@@ -30,6 +27,5 @@ window.Header = () => {
   );
 
   const logo = document.querySelector('.logo');
-  logo.addEventListener('click', () => { Page.home(); s});
-
+  logo.addEventListener('click', () => { Page.home();  });
 };

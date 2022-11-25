@@ -1,8 +1,8 @@
 window.Carrousel = (items, numberPerPage) => {
 
   let carrouselItems = [];
-  
-  function loadItems(numberPerPage, initialItem = 0){
+
+  function loadItems(numberPerPage, initialItem = 0) {
     carrouselItems = [];
     carrouselItems.push(
       myFramework.generalElement({
@@ -29,11 +29,11 @@ window.Carrousel = (items, numberPerPage) => {
           myFramework.text('p', `Tiragem: ${selectedBooks[i].tiragem}`)
         ]
       });
-      if( i >= numberPerPage){
+      if (i >= numberPerPage) {
         item.setAttribute('style', 'display: none');
-      }
+      };
       carrouselItems.push(item);
-    }
+    };
 
     carrouselItems.push(
       myFramework.generalElement({
@@ -43,7 +43,7 @@ window.Carrousel = (items, numberPerPage) => {
         attributeValue: '../assets/img/right-arrow.svg'
       }),
     );
-      return carrouselItems;
+    return carrouselItems;
   }
 
   return myFramework.container({
@@ -54,5 +54,5 @@ window.Carrousel = (items, numberPerPage) => {
         children: loadItems(numberPerPage)
       }),
     ]
-  })
-}
+  });
+};

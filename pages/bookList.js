@@ -11,11 +11,20 @@ window.Page.books = async () => {
     },
   });
 
+  const loadingSpinner = document.createElement('div');
+  loadingSpinner.setAttribute('id', 'loading');
+  loadingSpinner.setAttribute('class', 'loading');
+  loadingSpinner.innerText = 'Loading&#8230;';
+  loadingSpinner.style.visibility = 'visible';
+  main.appendChild(loadingSpinner);
+
   const bookList = await API.callApi({
     method: 'POST',
     service: '/lista',
     body
   });
+
+  loadingSpinner.style.visibility = 'hidden';
 
   const tableData = bookList.map(book => {
     return {
@@ -26,8 +35,8 @@ window.Page.books = async () => {
       tiragem: book.tiragem,
       editIcon: '../assets/img/edit_icon.svg',
       deleteIcon: '../assets/img/delete_icon.svg'
-    }
-  })
+    };
+  });
 
   async function editHandler() {
     const uidBook = this.className;
@@ -95,9 +104,8 @@ window.Page.books = async () => {
           text: `Livro '${title.value}' atualizado com sucesso!`,
           type: 'success',
         });
-      }
-
-    }
+      };
+    };
 
     const pageContainer = document.querySelector('.bookListPageContainer');
 
@@ -105,7 +113,7 @@ window.Page.books = async () => {
 
     pageContainer.appendChild(
       myFramework.modal(
-        form, 
+        form,
         {
           text: 'Atualizar',
           type: 'primary',
@@ -117,13 +125,13 @@ window.Page.books = async () => {
           onClick: closeModal
         }
       ));
-  }
+  };
 
   function closeModal() {
     const modal = document.querySelector('.modal-editBook');
     modal.remove();
-  }
-  
+  };
+
   async function deleteHandler() {
     const uid = this.id;
     const body = JSON.stringify({
@@ -131,13 +139,13 @@ window.Page.books = async () => {
         uid: API.authCode
       },
       uid
-    })
+    });
 
-    const deleteResult = await API.callApi({
+    await API.callApi({
       method: 'DELETE',
       service: '',
       body
-    })
+    });
 
     Page.books();
 
@@ -145,10 +153,9 @@ window.Page.books = async () => {
       text: 'Livro deletado com sucesso!',
       type: 'success',
     });
+  };
 
-  }
-
-  function confirmDelete(){
+  function confirmDelete() {
     const uid = this.className;
     main.appendChild(
       myFramework.modal(
@@ -165,10 +172,12 @@ window.Page.books = async () => {
           onClick: closeModal
         })
     );
-  }
+  };
 
   async function searchByKeyWords() {
     const search = document.getElementsByName('searchInput')[0];
+    const loadingSpinner = document.getElementById('loading');
+    loadingSpinner.style.visibility = 'visible';
 
     const bodyFiltered = JSON.stringify({
       text: search.value.toLocaleLowerCase(),
@@ -183,6 +192,9 @@ window.Page.books = async () => {
       body: bodyFiltered
     });
 
+    loadingSpinner.style.visibility = 'hidden';
+    search.value = '';
+
     const filteredTableData = filteredBooksByKeyWords.map(book => {
       return {
         uid: book.uid,
@@ -192,48 +204,37 @@ window.Page.books = async () => {
         tiragem: book.tiragem,
         editIcon: '../assets/img/edit_icon.svg',
         deleteIcon: '../assets/img/delete_icon.svg'
-      }
-    })
+      };
+    });
     createTable(filteredTableData);
 
-    let storagedItems = JSON.parse(localStorage.getItem('searchedBooks'));
-
-    if (!storagedItems) {
-      storagedItems = [];
-    }
+    const storagedItems = JSON.parse(localStorage.getItem('searchedBooks') || '[]');
 
     storagedItems.push(filteredBooksByKeyWords);
 
     if (storagedItems.length > 3) {
       storagedItems.shift();
-    }
+    };
 
     localStorage.setItem('searchedBooks', JSON.stringify(storagedItems));
-
-    const searchContainer = document.querySelector('.searchContainer');
-    searchContainer.appendChild(
-
-    );
-
-  }
+  };
 
   function loadDataStorage() {
     const storagedData = JSON.parse(localStorage.getItem('searchedBooks'));
     if (!storagedData) {
-      myFramework.notification.create({ text: 'Buscas prévias indisponíveis.', type:'alert' })
-      return
-    }
+      myFramework.notification.create({ text: 'Buscas prévias indisponíveis.', type: 'alert' });
+      return;
+    };
     let previousSearch = [];
     if (this.id == 'ultimaBusca') {
       previousSearch = storagedData.slice(-1);
-
     } else if (this.id == 'penultimaBusca' && storagedData.length > 1) {
       previousSearch = storagedData.slice(-2, -1);
     } else if (this.id == 'antiPenultimaBusca' && storagedData.length > 2) {
       previousSearch = storagedData.slice(-3, -2);
-    }else{
-      myFramework.notification.create({ text: 'Busca selecionada está indisponível.', type:'alert' })
-    }
+    } else {
+      myFramework.notification.create({ text: 'Busca selecionada está indisponível.', type: 'alert' });
+    };
 
     const previousTableData = previousSearch[0].map(book => {
       return {
@@ -244,10 +245,10 @@ window.Page.books = async () => {
         tiragem: book.tiragem,
         editIcon: '../assets/img/edit_icon.svg',
         deleteIcon: '../assets/img/delete_icon.svg'
-      }
-    })
+      };
+    });
     createTable(previousTableData);
-  }
+  };
 
 
   function createTable(filteredTableData) {
@@ -271,7 +272,7 @@ window.Page.books = async () => {
           }),
         ]
       }));
-  }
+  };
 
   main.appendChild(
     myFramework.container({

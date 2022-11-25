@@ -11,17 +11,17 @@
     'components/Footer',
     'components/Carrousel'
   ]) {
-    const script = document.createElement('script')
-    script.setAttribute('src', `${file}.js`)
+    const script = document.createElement('script');
+    script.setAttribute('src', `${file}.js`);
 
     document.head.appendChild(script);
-  }
+  };
 
   window.addEventListener('load', () => {
-    
+
     Header();
 
-    window.main = myFramework.generalElement({htmlElement: 'main'});
+    window.main = myFramework.generalElement({ htmlElement: 'main' });
     document.body.appendChild(main);
 
     Page.home();
