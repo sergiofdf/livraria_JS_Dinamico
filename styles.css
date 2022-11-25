@@ -15,11 +15,17 @@
 }
 
 header {
+  height: 15vh;
   background-color: var(--header-background-color);
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 20px;
+}
+
+header img {
+  height: 10vh;
+  cursor: pointer;
 }
 
 header nav a {
@@ -79,6 +85,7 @@ main{
 }
 
 footer{
+  height: 15vh;
   background-color: var(--footer-background-color);
   display: flex;
   align-items: center;
@@ -116,23 +123,56 @@ div.notification-success {
   box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
 }
 
+div.notification-alert {
+  color: rgb(245, 154, 17);
+  box-shadow: 0 0 10px rgba(245, 154, 17, 0.5);
+}
+
 .bookListPageContainer{
   position: relative;
-  min-height: 100vh;
+  min-height: 70vh;
   display: flex; 
   flex-direction: column; 
   align-items: center; 
-  justify-content: center;
+  justify-content: flex-start;
   background-color: var(--color-2);
   width: 100vw;
 }
 
-.bookListPageContainer > input{
-  margin: 50px;
+.searchContainer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80vw;
+}
+
+.searchContainer > input{
+  margin: 20px;
   font-size: 16px;
   padding: 5px;
   border-radius: 6px;
 }
+
+.fastLinksContainer{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-items: center;
+  background-color: #9aabbb;
+  padding: 5px;
+}
+
+.fastLinksContainer > a {
+  color: var(--text-color);
+  cursor: pointer;
+  margin: 5px;
+}
+
+.fastLinksContainer > a:hover{
+  color: var(--footer-background-color);
+  text-decoration: underline;
+  transition: ease-in-out 0.25s;
+} 
 
 .table-container{
   width: 97vw;
@@ -146,11 +186,10 @@ div.notification-success {
   width:100%; 
   border: 2px solid #000;
   border-collapse: collapse;
-  font-size: 2vw;
+  font-size: 16px;
 }
 
 .booksTable-head > th{
-  font-size: 3vw;
   padding: 10px; 
   text-align: center; 
   border: 2px solid #000;
@@ -177,7 +216,6 @@ div.notification-success {
   transition: ease-in 0.25s;
 }
 
-
 .modal-editBook{
   position: absolute;
   z-index: 1;
@@ -203,6 +241,12 @@ div.notification-success {
   padding: 20px;
 }
 
+.modal-dataContainer p{
+  font-size: 20px;
+  text-align: center;
+  color: var(--text-color);
+}
+
 .book-data{
   width: 350px;
   margin: 10px 0;
@@ -216,7 +260,7 @@ div.notification-success {
   font-size: 16px;
 }
 
-.book-data > input {
+.book-data > input, .book-data > textarea {
   width: 230px;
   margin-right: 20px;
   padding: 4px 0px 4px 8px;
@@ -230,17 +274,21 @@ div.notification-success {
   margin: 20px;
 }
 
-.primary{
+.primary, .cancel{
   width: auto;
+  margin: 10px 0;
   padding: 8px 20px;
-  background-color: var(--footer-background-color);
-  border: 2px solid var(--footer-background-color);
   color: var(--text-color);
   cursor: pointer;
   font-size: 16px;
   font-weight: bold;
   border-radius: 6px;
-  box-shadow: none;
+  margin-left: 10px;
+}
+
+.primary{
+  background-color: var(--footer-background-color);
+  border: 2px solid var(--footer-background-color);
 }
 
 .primary:hover{
@@ -251,17 +299,8 @@ div.notification-success {
 }
 
 .cancel{
-  width: auto;
-  padding: 8px 20px;
   background-color: rgba(224, 26, 26, 0.904);
   border: 2px solid rgba(224, 26, 26, 0.904);
-  color: var(--text-color);
-  cursor: pointer;
-  font-size: 16px;
-  font-weight: bold;
-  border-radius: 6px;
-  box-shadow: none;
-  margin-left: 10px;
 }
 
 .cancel:hover{
@@ -271,7 +310,7 @@ div.notification-success {
 }
 
 .book-form{
-  min-height: 100vh;
+  min-height: 70vh;
   padding: 20px;
   display: flex;
   flex-direction: column;
@@ -300,6 +339,10 @@ div.notification-success {
     font-size: 4vw;
   }
 
+  .booksTable{
+    font-size: 12px;
+  }
+
   .booksTable > tbody > tr > td > img{
     width: 10vw;
   }
@@ -323,7 +366,7 @@ div.notification-success {
 
   }
   
-  .book-data > input {
+  .book-data > input, .book-data > textarea{
     width: 50vw;
     margin-right: 10px;
     padding: 2px 0px 2px 4px;
@@ -333,6 +376,21 @@ div.notification-success {
   .primary, .cancel{
     font-size: 12px;
     padding: 6px 10px;
+  }
+
+  .searchContainer > input {
+    width: 60vw;
+    margin: 0 20px 0 0;
+  }
+
+  .fastLinksContainer > h2{
+    font-size: 16px;
+  }
+
+  @media (max-width: 370px){
+    .Descrição, .descricao{
+      display: none;
+    }
   }
   
 }

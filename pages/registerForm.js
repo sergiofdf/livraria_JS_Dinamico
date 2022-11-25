@@ -13,7 +13,10 @@ window.Page.register = () => {
     },
     {
       label: myFramework.label('Descrição'),
-      input: myFramework.input({ name: 'description' })
+      input: myFramework.textArea({
+        name: 'description',
+        id: 'Descrição'
+      })
     },
     {
       label: myFramework.label('Tiragem'),

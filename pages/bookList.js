@@ -5,7 +5,7 @@ window.Page.books = async () => {
   tableHead = ['Título', 'Autor', 'Descrição', 'Tiragem', 'Editar', 'Deletar'];
 
   const body = JSON.stringify({
-    text: "",
+    text: '',
     aluno: {
       uid: API.authCode,
     },
@@ -50,9 +50,10 @@ window.Page.books = async () => {
       },
       {
         label: myFramework.label('Descrição'),
-        input: myFramework.input({
+        input: myFramework.textArea({
           name: 'description',
-          value: selectedItem.descricao
+          id: 'Descrição',
+          textValue: selectedItem.descricao
         })
       },
       {
@@ -64,18 +65,12 @@ window.Page.books = async () => {
       }
     ];
 
-    function closeModal() {
-      const modal = document.querySelector('.modal-editBook');
-      modal.remove();
-    }
-
     async function updateBook() {
       const title = document.getElementsByName('title')[0];
       const author = document.getElementsByName('author')[0];
       const tiragem = document.getElementsByName('tiragem')[0];
       const description = document.getElementsByName('description')[0];
 
-      debugger
       const body = JSON.stringify({
         uid: uidBook,
         aluno: {
@@ -105,14 +100,32 @@ window.Page.books = async () => {
     }
 
     const pageContainer = document.querySelector('.bookListPageContainer');
-    pageContainer.appendChild(
-      myFramework.modal(formData, updateBook, closeModal
-      ));
 
+    const form = myFramework.form(formData);
+
+    pageContainer.appendChild(
+      myFramework.modal(
+        form, 
+        {
+          text: 'Atualizar',
+          type: 'primary',
+          onClick: updateBook
+        },
+        {
+          text: 'Cancelar',
+          type: 'cancel',
+          onClick: closeModal
+        }
+      ));
   }
 
+  function closeModal() {
+    const modal = document.querySelector('.modal-editBook');
+    modal.remove();
+  }
+  
   async function deleteHandler() {
-    const uid = this.className;
+    const uid = this.id;
     const body = JSON.stringify({
       aluno: {
         uid: API.authCode
@@ -135,13 +148,41 @@ window.Page.books = async () => {
 
   }
 
-  function searchByKeyWords() {
-    const filteredBooksByKeyWords = bookList.filter(item => {
-      return ( (item.titulo.toLocaleLowerCase().includes(this.value.toLocaleLowerCase()))
-        || (item.autor.toLocaleLowerCase().includes(this.value.toLocaleLowerCase()))
-      );
-      
+  function confirmDelete(){
+    const uid = this.className;
+    main.appendChild(
+      myFramework.modal(
+        [myFramework.text('p', 'Tem certeza que deseja apagar o item selecionado?')],
+        {
+          text: 'Deletar',
+          type: 'cancel',
+          id: uid,
+          onClick: deleteHandler
+        },
+        {
+          text: 'Cancelar',
+          type: 'primary',
+          onClick: closeModal
+        })
+    );
+  }
+
+  async function searchByKeyWords() {
+    const search = document.getElementsByName('searchInput')[0];
+
+    const bodyFiltered = JSON.stringify({
+      text: search.value.toLocaleLowerCase(),
+      aluno: {
+        uid: API.authCode,
+      },
     });
+
+    const filteredBooksByKeyWords = await API.callApi({
+      method: 'POST',
+      service: '/lista',
+      body: bodyFiltered
+    });
+
     const filteredTableData = filteredBooksByKeyWords.map(book => {
       return {
         uid: book.uid,
@@ -154,6 +195,58 @@ window.Page.books = async () => {
       }
     })
     createTable(filteredTableData);
+
+    let storagedItems = JSON.parse(localStorage.getItem('searchedBooks'));
+
+    if (!storagedItems) {
+      storagedItems = [];
+    }
+
+    storagedItems.push(filteredBooksByKeyWords);
+
+    if (storagedItems.length > 3) {
+      storagedItems.shift();
+    }
+
+    localStorage.setItem('searchedBooks', JSON.stringify(storagedItems));
+
+    const searchContainer = document.querySelector('.searchContainer');
+    searchContainer.appendChild(
+
+    );
+
+  }
+
+  function loadDataStorage() {
+    const storagedData = JSON.parse(localStorage.getItem('searchedBooks'));
+    if (!storagedData) {
+      myFramework.notification.create({ text: 'Buscas prévias indisponíveis.', type:'alert' })
+      return
+    }
+    let previousSearch = [];
+    if (this.id == 'ultimaBusca') {
+      previousSearch = storagedData.slice(-1);
+
+    } else if (this.id == 'penultimaBusca' && storagedData.length > 1) {
+      previousSearch = storagedData.slice(-2, -1);
+    } else if (this.id == 'antiPenultimaBusca' && storagedData.length > 2) {
+      previousSearch = storagedData.slice(-3, -2);
+    }else{
+      myFramework.notification.create({ text: 'Busca selecionada está indisponível.', type:'alert' })
+    }
+
+    const previousTableData = previousSearch[0].map(book => {
+      return {
+        uid: book.uid,
+        titulo: book.titulo,
+        autor: book.autor,
+        descricao: book.descricao,
+        tiragem: book.tiragem,
+        editIcon: '../assets/img/edit_icon.svg',
+        deleteIcon: '../assets/img/delete_icon.svg'
+      }
+    })
+    createTable(previousTableData);
   }
 
 
@@ -163,59 +256,84 @@ window.Page.books = async () => {
     const tableContainer = document.querySelector('.table-container');
     tableContainer.appendChild(
       myFramework.container({
-        className: 'table-container',
+        elementType: 'table',
+        className: 'booksTable',
         children: [
           myFramework.container({
-            elementType: 'table',
-            className: 'booksTable',
-            children: [
-              myFramework.container({
-                elementType: 'thead',
-                className: 'booksTable-head',
-                children: myFramework.tableHead(tableHead)
-              }),
-              myFramework.container({
-                elementType: 'tbody',
-                className: 'booksTable-body',
-                children: myFramework.tableBody(filteredTableData, editHandler, deleteHandler)
-              }),
-            ]
-          })
+            elementType: 'thead',
+            className: 'booksTable-head',
+            children: myFramework.tableHead(tableHead)
+          }),
+          myFramework.container({
+            elementType: 'tbody',
+            className: 'booksTable-body',
+            children: myFramework.tableBody(filteredTableData, editHandler, deleteHandler)
+          }),
         ]
       }));
   }
 
-    main.appendChild(
-      myFramework.container({
-        className: 'bookListPageContainer',
-        children: [
-          myFramework.input({
-            name: 'searchInput',
-            placeholder: 'Digite para buscar...',
-            onKeyUp: searchByKeyWords
-          }),
-          myFramework.container({
-            className: 'table-container',
-            children: [
-              myFramework.container({
-                elementType: 'table',
-                className: 'booksTable',
-                children: [
-                  myFramework.container({
-                    elementType: 'thead',
-                    className: 'booksTable-head',
-                    children: myFramework.tableHead(tableHead)
-                  }),
-                  myFramework.container({
-                    elementType: 'tbody',
-                    className: 'booksTable-body',
-                    children: myFramework.tableBody(tableData, editHandler, deleteHandler)
-                  }),
-                ]
-              })
-            ]
-          })
-        ],
-      })
-    );
+  main.appendChild(
+    myFramework.container({
+      className: 'bookListPageContainer',
+      children: [
+        myFramework.container({
+          className: 'searchContainer',
+          children: [
+            myFramework.input({
+              name: 'searchInput',
+              placeholder: 'Digite a busca...',
+            }),
+            myFramework.button({
+              text: 'Buscar',
+              type: 'primary',
+              onClick: searchByKeyWords
+            }),
+          ],
+        }),
+        myFramework.container({
+          className: 'fastLinksContainer',
+          children: [
+            myFramework.text('h2', 'Links para carregar buscas prévias'),
+            myFramework.link({
+              text: 'Última Busca',
+              id: 'ultimaBusca',
+              onClick: loadDataStorage
+            }),
+            myFramework.link({
+              text: 'Penúltima Busca',
+              id: 'penultimaBusca',
+              onClick: loadDataStorage
+            }),
+            myFramework.link({
+              text: 'Anti-penúltima Busca',
+              id: 'antiPenultimaBusca',
+              onClick: loadDataStorage
+            }),
+          ]
+        }),
+        myFramework.container({
+          className: 'table-container',
+          children: [
+            myFramework.container({
+              elementType: 'table',
+              className: 'booksTable',
+              children: [
+                myFramework.container({
+                  elementType: 'thead',
+                  className: 'booksTable-head',
+                  children: myFramework.tableHead(tableHead)
+                }),
+                myFramework.container({
+                  elementType: 'tbody',
+                  className: 'booksTable-body',
+                  children: myFramework.tableBody(tableData, editHandler, confirmDelete)
+                }),
+              ]
+            })
+          ]
+        })
+      ],
+    })
+  );
 };

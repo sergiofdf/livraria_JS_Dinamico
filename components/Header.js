@@ -11,12 +11,13 @@ window.Header = () => {
           children: [
             myFramework.link({
               text: 'HOME',
-              onClick: () => {  Page.home(); },
+              onClick: () => { Page.home(); },
             }),
             myFramework.link({
               text: 'LIVROS',
-              onClick: () => {  
-                Page.books(); },
+              onClick: () => {
+                Page.books();
+              },
             }),
             myFramework.link({
               text: 'CADASTRO',
@@ -27,5 +28,8 @@ window.Header = () => {
       ]
     })
   );
+
+  const logo = document.querySelector('.logo');
+  logo.addEventListener('click', () => { Page.home(); s});
 
 };

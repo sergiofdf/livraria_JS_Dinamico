@@ -65,7 +65,7 @@ window.Page.home = () => {
       myFramework.container({
         className: 'home-container',
         children: [
-          myFramework.text('h1', 'Veja os destaques selecionados pela nossa Livraria'),
+          myFramework.text('h1', 'Veja os destaques selecionados pelo nosso time!'),
           Carrousel(selectedBooks, numberPerPage)
         ]
       })
